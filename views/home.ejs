@@ -14,7 +14,7 @@
 	<hr>
 	<p><table style="width:90%;">
 	<% for(var i in collection) { %>
-		<%- include('data_item', {val:collection[i]}) %>
+		<%- include('data_item', {val:collection[i], likes:userLikes}) %>
 	<% } %>
 	</table></p>
 	<p>
