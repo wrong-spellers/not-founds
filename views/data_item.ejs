@@ -1,4 +1,14 @@
 <% if (val != null){ %>
+<%
+    // Likeされているかどうか調べる
+    let liked = false;
+    for(let i in likes) {
+        if (likes[i].attributes.message_id == val.attributes.id) {
+            liked = true;
+            break;
+        }
+    }
+%>
 <tr>
     <th style="width:100px;">
     <a class="home" href="/home/<%=val.attributes.user_id %>/1">
@@ -10,5 +20,10 @@
     + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
     %>
     <td style="width:150px;"><%= dstr %></td>
+    <% if(liked) { %>
+    <td>★</td>
+    <% } else { %>
+    <td>☆</td>
+    <% } %>
 </tr>
 <% } %>
