@@ -25,6 +25,10 @@ var Message = Bookshelf.Model.extend({
    }
 });
 
+var Like = Bookshelf.Model.extend({
+    tableName: 'likes'
+})
+
 router.get('/', (req, res, next) => {
    if (req.session.login == null){
       res.redirect('/users');
@@ -41,20 +45,25 @@ router.get('/:page', (req, res, next) => {
    var pg = req.params.page;
    pg *= 1;
    if (pg < 1){ pg = 1; }
+   var data = {
+      title: 'Not Founds',
+       login: req.session.login
+   };
    new Message().orderBy('created_at', 'DESC')
          .fetchPage({page:pg, pageSize:10, withRelated: ['user']})
          .then((collection) => {
-      var data = {
-         title: 'Not Founds',
-         login:req.session.login,
-         collection:collection.toArray(),
-         pagination:collection.pagination
-      };
-      res.render('index', data);
-   }).catch((err) => {
-      res.status(500).json({error: true, data: {message: err.message}});
-   });
-
+             data.collection = collection.toArray();
+             data.pagination = collection.pagination;
+             new Like().where('user_id', '=', req.session.login.id)
+                 .fetchAll().then((collection2) => {
+                 data.userLikes = collection2.toArray();
+                 res.render('index', data);
+             }).catch((err) => {
+                 res.status(500).json({error: true, data: {message: err.message}});
+             });
+         }).catch((err) => {
+            res.status(500).json({error: true, data: {message: err.message}});
+         });
 });
 
 router.post('/',(req, res, next) => {
