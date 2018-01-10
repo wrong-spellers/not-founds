@@ -105,12 +105,7 @@ router.post('/', (req, res, next) => {
                response.render('users/login',data);
             } else {
                request.session.login = model.attributes;
-               var data = {
-                  title:'Users/Login',
-                  content:'<p>ログインしました！<br>トップページに戻ってメッセージを送信下さい。</p>',
-                  form: req.body
-               };
-               response.render('users/login',data);
+               response.redirect('/');
             }
          });
       }
