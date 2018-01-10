@@ -15,6 +15,16 @@ var User = Bookshelf.Model.extend({
    tableName: 'users'
 });
 
+router.get('/logout', (req, res, next) => {
+    req.session.login = null;
+    var data = {
+        title:'Not Founds',
+        form:{name:'',password:''},
+        content:'ログアウトしました。'
+    }
+    res.render('users/login', data);
+});
+
 router.get('/add', (req, res, next) => {
    var data = {
       title:'Users/Add',
