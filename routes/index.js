@@ -45,7 +45,7 @@ router.get('/:page', (req, res, next) => {
          .fetchPage({page:pg, pageSize:10, withRelated: ['user']})
          .then((collection) => {
       var data = {
-         title: 'miniBoard',
+         title: 'Not Founds',
          login:req.session.login,
          collection:collection.toArray(),
          pagination:collection.pagination
