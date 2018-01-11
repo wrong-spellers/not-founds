@@ -61,6 +61,17 @@ router.get('/dislike/:message_id', (req, res, next) => {
     });
 });
 
+router.get('/delete/:message_id', (req, res, next) => {
+    if (req.session.login == null){
+        res.redirect('/users');
+        return;
+    }
+    new Message().where({id:req.params.message_id, user_id: req.session.login.id})
+        .destroy().then((model) => {
+        res.redirect(req.headers.referer); //遷移元URLにリダイレクト
+    });
+});
+
 router.get('/:page', (req, res, next) => {
    if (req.session.login == null){
       res.redirect('/users');

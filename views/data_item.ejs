@@ -8,6 +8,8 @@
             break;
         }
     }
+    //自分の投稿かどうか調べる
+    let isOwnMessage = (val.relations.user.attributes.id == login.id);
 %>
 <tr>
     <th style="width:100px;">
@@ -24,6 +26,11 @@
     <td><a href="/dislike/<%=val.attributes.id%>">★</a></td>
     <% } else { %>
     <td><a href="/like/<%=val.attributes.id%>">☆</a></td>
+    <% } %>
+    <% if(isOwnMessage) { %>
+    <td><a href="/delete/<%=val.attributes.id%>">削除</a></td>
+    <% } else { %>
+    <td>-</td>
     <% } %>
 </tr>
 <% } %>
