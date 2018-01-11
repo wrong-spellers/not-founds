@@ -38,7 +38,6 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/like/:message_id', (req, res, next) => {
-    //:pageはリダイレクト先の指定に必要
     if (req.session.login == null){
         res.redirect('/users');
         return;
@@ -50,7 +49,6 @@ router.get('/like/:message_id', (req, res, next) => {
 });
 
 router.get('/dislike/:message_id', (req, res, next) => {
-    //:pageはリダイレクト先の指定に必要
     if (req.session.login == null){
         res.redirect('/users');
         return;
