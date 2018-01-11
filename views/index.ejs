@@ -18,7 +18,7 @@
     <hr>
     <p><table style="width:95%;">
       <% for(var i in collection) { %>
-          <%- include('data_item', {val:collection[i], likes:userLikes}) %>
+          <%- include('data_item', {val:collection[i], likes:userLikes, page:pagination.page}) %>
       <% } %>
     </table></p>
     <p>

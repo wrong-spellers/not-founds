@@ -37,6 +37,18 @@ router.get('/', (req, res, next) => {
    }
 });
 
+router.get('/like/:message_id/:origin_page', (req, res, next) => {
+    //:pageはリダイレクト先の指定に必要
+    if (req.session.login == null){
+        res.redirect('/users');
+        return;
+    }
+    new Like({user_id: req.session.login.id, message_id:req.params.message_id})
+        .save().then((model) => {
+        res.redirect('/'+req.params.origin_page);
+    });
+});
+
 router.get('/:page', (req, res, next) => {
    if (req.session.login == null){
       res.redirect('/users');
