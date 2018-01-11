@@ -37,7 +37,7 @@ router.get('/', (req, res, next) => {
    }
 });
 
-router.get('/like/:message_id/:origin_page', (req, res, next) => {
+router.get('/like/:message_id', (req, res, next) => {
     //:pageはリダイレクト先の指定に必要
     if (req.session.login == null){
         res.redirect('/users');
@@ -45,12 +45,11 @@ router.get('/like/:message_id/:origin_page', (req, res, next) => {
     }
     new Like({user_id: req.session.login.id, message_id:req.params.message_id})
         .save().then((model) => {
-            //TODO 不要なURLパラメータ:origin_pageをビューから削除
         res.redirect(req.headers.referer); //遷移元URLにリダイレクト
     });
 });
 
-router.get('/dislike/:message_id/:origin_page', (req, res, next) => {
+router.get('/dislike/:message_id', (req, res, next) => {
     //:pageはリダイレクト先の指定に必要
     if (req.session.login == null){
         res.redirect('/users');
@@ -58,7 +57,6 @@ router.get('/dislike/:message_id/:origin_page', (req, res, next) => {
     }
     new Like().where({user_id: req.session.login.id, message_id:req.params.message_id})
         .destroy().then((model) => {
-        //TODO 不要なURLパラメータ:origin_pageをビューから削除
         res.redirect(req.headers.referer); //遷移元URLにリダイレクト
     });
 });

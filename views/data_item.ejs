@@ -21,9 +21,9 @@
     %>
     <td style="width:150px;"><%= dstr %></td>
     <% if(liked) { %>
-    <td><a href="/dislike/<%=val.attributes.id%>/<%=page%>">★</a></td>
+    <td><a href="/dislike/<%=val.attributes.id%>">★</a></td>
     <% } else { %>
-    <td><a href="/like/<%=val.attributes.id%>/<%=page%>">☆</a></td>
+    <td><a href="/like/<%=val.attributes.id%>">☆</a></td>
     <% } %>
 </tr>
 <% } %>
