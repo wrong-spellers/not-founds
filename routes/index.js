@@ -107,7 +107,67 @@ router.get('/bookmarks', (req, res, next) => {
                 for(let j in data.collection) {
                     console.log(data.collection[j].attributes.liked);
                 }
+                data.activeIndex = 3; //選択されたタブを設定するため
                 res.render('index', data);
+            }).catch((err) => {
+                res.status(500).json({error: true, data: {message: err.message}});
+            });
+        }).catch((err) => {
+        res.status(500).json({error: true, data: {message: err.message}});
+    });
+});
+
+router.get('/hot', (req, res, next) => {
+    if (req.session.login == null){
+        res.redirect('/users');
+        return;
+    }
+    var data = {
+        title: 'Not Founds',
+        login: req.session.login,
+        collection: []
+    };
+    new Message().orderBy('created_at', 'DESC')
+        .fetchAll({withRelated: ['user']})
+        .then((messages) => {
+            //TODO new Like() -> Like 置換
+            new Like().fetchAll().then((likes) => {
+                data.userLikes = likes.toArray();
+                // 各投稿がいずれかのユーザにLikeされているかどうか調べる
+                let messagesArray = messages.toArray();
+                let likesArray = likes.toArray();
+                for(let j in messagesArray) {
+                    for (let i in likesArray) {
+                        if (likesArray[i].attributes.message_id == messagesArray[j].attributes.id) {
+                            data.collection.push(messagesArray[j]);
+                            break;
+                        }
+                    }
+                }
+                new Like().where('user_id', req.session.login.id)
+                    .fetchAll().then((collection2) => {
+                    userLikes = collection2.toArray();
+                    // 各投稿がログインユーザにLikeされているかどうか調べる
+                    for(let j in data.collection) {
+                        let liked = false;
+                        for (let i in userLikes) {
+                            if (userLikes[i].attributes.message_id == data.collection[j].attributes.id) {
+                                liked = true;
+                                break;
+                            }
+                        }
+                        data.collection[j].attributes.liked = liked;
+                    }
+                    //結果の確認
+                    //TODO これを消す
+                    for(let j in data.collection) {
+                        console.log(data.collection[j].attributes.liked);
+                    }
+                    data.activeIndex = 2; //選択されたタブを設定するため
+                    res.render('index', data);
+                }).catch((err) => {
+                    res.status(500).json({error: true, data: {message: err.message}});
+                });
             }).catch((err) => {
                 res.status(500).json({error: true, data: {message: err.message}});
             });
@@ -135,6 +195,7 @@ router.get('/:page', (req, res, next) => {
              data.pagination = collection.pagination;
              new Like().where('user_id', '=', req.session.login.id)
                  .fetchAll().then((collection2) => {
+                 //TODO data.userLikesを消す 気をつける
                  data.userLikes = collection2.toArray();
                  // 各投稿がログインユーザにLikeされているかどうか調べる
                  for(let j in data.collection) {
@@ -152,6 +213,7 @@ router.get('/:page', (req, res, next) => {
                  for(let j in data.collection) {
                      console.log(data.collection[j].attributes.liked);
                  }
+                 data.activeIndex = 1; //選択されたタブを設定するため
                  res.render('index', data);
              }).catch((err) => {
                  res.status(500).json({error: true, data: {message: err.message}});
