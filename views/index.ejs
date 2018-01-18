@@ -110,7 +110,7 @@
 
             <!--  dialog -->
             <el-dialog title="Sign up or Sign in" :visible.sync="dialogSignVisible">
-                <el-form :model="sign" method="post">
+                <el-form :model="sign">
                     <el-form-item label="User name" :label-width="formLabelWidth">
                         <el-input v-model="sign.username" auto-complete="off"></el-input>
                     </el-form-item>
@@ -126,18 +126,18 @@
 
             <!--  dialog -->
             <el-dialog title="Plz 404" :visible.sync="dialogFormVisible">
-                <el-form :model="form">
+                <el-form :model="form" name="myform" method="post" action="/">
                     <el-form-item label="Page name" :label-width="formLabelWidth">
-                        <el-input v-model="form.name" auto-complete="off"></el-input>
+                        <el-input name="title" v-model="form.name" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="URL" :label-width="formLabelWidth">
-                        <el-input v-model="form.url" auto-complete="off"></el-input>
+                        <el-input name="msg" v-model="form.url" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">Cancel</el-button>
-              <el-button type="primary" @click="dialogFormVisible = false">OK</el-button>
-            </span>
+                  <el-button @click="dialogFormVisible = false">Cancel</el-button>
+                  <el-button type="primary" @click="onSubmit">OK</el-button>
+                </span>
             </el-dialog>
 
 
@@ -153,13 +153,13 @@
                     <div class="mdl-card mdl-shadow--2dp demo-card-square">
                         <div class="mdl-card__media">
                             <a href="https://www.tumblr.com/404" target="_blank">
-                                <img title="https://www.tumblr.com/404" src="http://api.screenshotmachine.com/?key=de8291&dimension=320x240&url=https://tumblr.com/404">
+                                <img title="https://www.tumblr.com/404" src="http://api.screenshotmachine.com/?key=de8291&dimension=320x240&url=<%= collection[i].attributes.message %>">
                             </a>
                         </div>
                         <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
                             <strong><%= collection[i].attributes.message %></strong>
-                            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-1">
-                                <input type="checkbox" id="icon-toggle-1" class="mdl-icon-toggle__input">
+                            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-<%= collection[i].attributes.id %>">
+                                <input type="checkbox" id="icon-toggle-<%= collection[i].attributes.id %>" class="mdl-icon-toggle__input">
                                 <i class="mdl-icon-toggle__label material-icons">turned_in</i>
                             </label>
                         </div>
@@ -212,13 +212,9 @@
             };
         },
         methods: {
-            startHacking() {
-                this.$notify({
-                    title: 'Complete!',
-                    type: 'success',
-                    message: 'We\'ve laid the ground work for you. It\'s time for you to build something epic!',
-                    duration: 5000
-                })
+            onSubmit() {
+                console.log('submit!');
+                document.myform.submit();
             }
         }
     })

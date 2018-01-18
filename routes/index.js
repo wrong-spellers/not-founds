@@ -100,6 +100,7 @@ router.get('/:page', (req, res, next) => {
 });
 
 router.post('/',(req, res, next) => {
+    console.log("POSTがきたきた");
 var rec = {
    message: req.body.msg,
    user_id: req.session.login.id
