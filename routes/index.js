@@ -37,7 +37,7 @@ router.get('/', (req, res, next) => {
    }
 });
 
-router.post('/like/:message_id', (req, res, next) => {
+router.get('/like/:message_id', (req, res, next) => {
     if (req.session.login == null){
         res.redirect('/users');
         return;

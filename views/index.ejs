@@ -151,6 +151,7 @@
                     <% for(var i in collection) { %>
                     <% let id = collection[i].attributes.id %>
                     <% let message = collection[i].attributes.message %>
+                    <% let liked = collection[i].attributes.liked %>
                     <%
                       let checkedAttr = "";
                       if(collection[i].attributes.liked){
@@ -168,7 +169,7 @@
                         <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
                             <strong><%= message %></strong>
                             <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-<%= id %>">
-                                <input <%= checkedAttr %> @click="bookmark(<%= id %>)" type="checkbox" id="icon-toggle-<%= id %>" class="mdl-icon-toggle__input">
+                                <input <%= checkedAttr %> @click="onBookmark(<%= id %>)" type="checkbox" id="icon-toggle-<%= id %>" class="mdl-icon-toggle__input">
                                 <i class="mdl-icon-toggle__label material-icons">turned_in</i>
                             </label>
                         </div>
@@ -225,13 +226,20 @@
                 console.log('submit!');
                 document.myform.submit();
             },
-            bookmark(postid) {
-              // var card = this.parentNode
-              //   if (card.){
-                                  console.log('オッ!'+postid)
-                // }else {
-                //   elementNode.setAttribute(name,true)
-                // }
+            onBookmark(postId) {
+              if(document.getElementById("icon-toggle-"+postId).checked){
+                console.log('LIKE: '+postId)
+                // GET /dislike/13
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open( "GET", "/like/" + postId, true); // false for synchronous request
+                xmlHttp.send( null );
+              } else {
+                console.log('DISLIKE: '+postId)
+                // GET /like/13
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open( "GET", "/dislike/" + postId, true ); // false for synchronous request
+                xmlHttp.send( null );
+              }
             }
         }
     })
