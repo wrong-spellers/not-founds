@@ -37,7 +37,7 @@ router.get('/', (req, res, next) => {
    }
 });
 
-router.get('/like/:message_id', (req, res, next) => {
+router.post('/like/:message_id', (req, res, next) => {
     if (req.session.login == null){
         res.redirect('/users');
         return;
@@ -90,6 +90,22 @@ router.get('/:page', (req, res, next) => {
              new Like().where('user_id', '=', req.session.login.id)
                  .fetchAll().then((collection2) => {
                  data.userLikes = collection2.toArray();
+                 // 各投稿がログインユーザにLikeされているかどうか調べる
+                 for(let j in data.collection) {
+                     let liked = false;
+                     for (let i in data.userLikes) {
+                         if (data.userLikes[i].attributes.message_id == data.collection[j].attributes.id) {
+                             liked = true;
+                             break;
+                         }
+                     }
+                     data.collection[j].attributes.liked = liked;
+                 }
+                 //結果の確認
+                 //TODO これを消す
+                 for(let j in data.collection) {
+                     console.log(data.collection[j].attributes.liked);
+                 }
                  res.render('index', data);
              }).catch((err) => {
                  res.status(500).json({error: true, data: {message: err.message}});
