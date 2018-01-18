@@ -147,6 +147,8 @@
                 <!-- NEW  -->
                 <div class="el-main__New" v-show="New">
 
+                    <% for(var i in collection) { %>
+
                     <!-- Square card -->
                     <div class="mdl-card mdl-shadow--2dp demo-card-square">
                         <div class="mdl-card__media">
@@ -155,7 +157,7 @@
                             </a>
                         </div>
                         <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
-                            <strong>{{Title}}</strong>
+                            <strong><%= collection[i].attributes.message %></strong>
                             <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-1">
                                 <input type="checkbox" id="icon-toggle-1" class="mdl-icon-toggle__input">
                                 <i class="mdl-icon-toggle__label material-icons">turned_in</i>
@@ -163,54 +165,7 @@
                         </div>
                     </div>
 
-
-                    <!-- Square card -->
-                    <div class="mdl-card mdl-shadow--2dp demo-card-square">
-                        <div class="mdl-card__media">
-                            <a href="https://fonts.google.com/404" target=”_blank”>
-                                <img title="Google" src="http://api.screenshotmachine.com/?key=de8291&dimension=320x240&url=https://fonts.google.com/404">
-                            </a>
-                        </div>
-                        <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
-                            <strong>Title</strong>
-                            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-2">
-                                <input type="checkbox" id="icon-toggle-2" class="mdl-icon-toggle__input">
-                                <i class="mdl-icon-toggle__label material-icons">turned_in</i>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Square card -->
-                    <div class="mdl-card mdl-shadow--2dp demo-card-square">
-                        <div class="mdl-card__media">
-                            <a href="https://www.magicleap.com/404" target=”_blank”>
-                                <img src="http://api.screenshotmachine.com/?key=de8291&dimension=320x240&url=https://www.magicleap.com/404" alt="">
-                            </a>
-                        </div>
-                        <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
-                            <strong>Title</strong>
-                            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-3">
-                                <input type="checkbox" id="icon-toggle-3" class="mdl-icon-toggle__input">
-                                <i class="mdl-icon-toggle__label material-icons">turned_in</i>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Square card -->
-                    <div class="mdl-card mdl-shadow--2dp demo-card-square">
-                        <div class="mdl-card__media">
-                            <a href="https://www.dropbox.com/404" target=”_blank”>
-                                <img src="http://api.screenshotmachine.com/?key=de8291&dimension=320x240&url=https://www.dropbox.com/404" alt="">
-                            </a>
-                        </div>
-                        <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
-                            <strong>Title</strong>
-                            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-3">
-                                <input type="checkbox" id="icon-toggle-3" class="mdl-icon-toggle__input">
-                                <i class="mdl-icon-toggle__label material-icons">turned_in</i>
-                            </label>
-                        </div>
-                    </div>
+                    <% } %>
 
                 </div>
 
