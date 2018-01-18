@@ -98,8 +98,9 @@
                         <i class="material-icons">person</i>
                     </button>
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
-                        <li class="mdl-menu__item" @click="dialogSignVisible = true">Sign in/Sign up</li>
-                        <li disabled class="mdl-menu__item">Sign out</li>
+                        <li disabled class="mdl-menu__item"><%= login.name %></li>
+                        <!--<li class="mdl-menu__item" @click="dialogSignVisible = true">Sign in/Sign up</li>-->
+                        <a href="/users/logout" style="text-decoration: none"><li class="mdl-menu__item">Sign out</li></a>
                     </ul>
                     <button @click="dialogFormVisible = true" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
                         <i class="material-icons">add</i>
