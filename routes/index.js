@@ -26,7 +26,10 @@ var Message = Bookshelf.Model.extend({
 });
 
 var Like = Bookshelf.Model.extend({
-    tableName: 'likes'
+    tableName: 'likes',
+    message: function () {
+        return this.belongsTo(Message);
+    },
 })
 
 router.get('/', (req, res, next) => {
@@ -67,6 +70,49 @@ router.get('/delete/:message_id', (req, res, next) => {
     new Message().where({id:req.params.message_id, user_id: req.session.login.id})
         .destroy().then((model) => {
         res.redirect(req.headers.referer); //遷移元URLにリダイレクト
+    });
+});
+
+router.get('/bookmarks', (req, res, next) => {
+    if (req.session.login == null){
+        res.redirect('/users');
+        return;
+    }
+    var data = {
+        title: 'Not Founds',
+        login: req.session.login,
+        collection: []
+    };
+    new Message().orderBy('created_at', 'DESC')
+        .fetchAll({withRelated: ['user']})
+        .then((messages) => {
+            //TODO new Like() -> Like 置換
+            new Like().where('user_id', req.session.login.id)
+                .fetchAll().then((likes) => {
+                data.userLikes = likes.toArray();
+                // 各投稿がログインユーザにLikeされているかどうか調べる
+                let messagesArray = messages.toArray();
+                let likesArray = likes.toArray()
+                for(let j in messagesArray) {
+                    for (let i in likesArray) {
+                        if (likesArray[i].attributes.message_id == messagesArray[j].attributes.id) {
+                            messagesArray[j].attributes.liked = true;
+                            data.collection.push(messagesArray[j]);
+                            break;
+                        }
+                    }
+                }
+                //結果の確認
+                //TODO これを消す
+                for(let j in data.collection) {
+                    console.log(data.collection[j].attributes.liked);
+                }
+                res.render('index', data);
+            }).catch((err) => {
+                res.status(500).json({error: true, data: {message: err.message}});
+            });
+        }).catch((err) => {
+        res.status(500).json({error: true, data: {message: err.message}});
     });
 });
 
@@ -125,5 +171,7 @@ var rec = {
    res.redirect('/');
  });
 })
+
+
 
 module.exports = router;
