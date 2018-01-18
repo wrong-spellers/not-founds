@@ -149,18 +149,26 @@
                 <div class="el-main__New" v-show="New">
 
                     <% for(var i in collection) { %>
+                    <% let id = collection[i].attributes.id %>
+                    <% let message = collection[i].attributes.message %>
+                    <%
+                      let checkedAttr = "";
+                      if(collection[i].attributes.liked){
+                        checkedAttr = " checked ";
+                      }
+                    %>
 
                     <!-- Square card -->
                     <div class="mdl-card mdl-shadow--2dp demo-card-square">
                         <div class="mdl-card__media">
                             <a href="https://www.tumblr.com/404" target="_blank">
-                                <img title="https://www.tumblr.com/404" src="http://api.screenshotmachine.com/?key=de8291&dimension=320x240&url=<%= collection[i].attributes.message %>">
+                                <img title="https://www.tumblr.com/404" src="http://api.screenshotmachine.com/?key=de8291&dimension=320x240&url=<%= message %>">
                             </a>
                         </div>
                         <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
-                            <strong><%= collection[i].attributes.message %></strong>
-                            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-<%= collection[i].attributes.id %>">
-                                <input type="checkbox" id="icon-toggle-<%= collection[i].attributes.id %>" class="mdl-icon-toggle__input">
+                            <strong><%= message %></strong>
+                            <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-<%= id %>">
+                                <input <%= checkedAttr %> @click="bookmark(<%= id %>)" type="checkbox" id="icon-toggle-<%= id %>" class="mdl-icon-toggle__input">
                                 <i class="mdl-icon-toggle__label material-icons">turned_in</i>
                             </label>
                         </div>
@@ -216,6 +224,14 @@
             onSubmit() {
                 console.log('submit!');
                 document.myform.submit();
+            },
+            bookmark(postid) {
+              // var card = this.parentNode
+              //   if (card.){
+                                  console.log('オッ!'+postid)
+                // }else {
+                //   elementNode.setAttribute(name,true)
+                // }
             }
         }
     })
