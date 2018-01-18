@@ -207,6 +207,7 @@ router.get('/:page', (req, res, next) => {
 
 router.post('/',(req, res, next) => {
 var rec = {
+    title: req.body.title,
    message: req.body.msg,
    user_id: req.session.login.id
  }

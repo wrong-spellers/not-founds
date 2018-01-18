@@ -161,6 +161,7 @@
 
                 <% for(var i in collection) { %>
                 <% let id = collection[i].attributes.id %>
+                <% let title = collection[i].attributes.title %>
                 <% let message = collection[i].attributes.message %>
                 <% let liked = collection[i].attributes.liked %>
                 <%
@@ -178,7 +179,7 @@
                         </a>
                     </div>
                     <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
-                        <strong><%= message %></strong>
+                        <strong><%= title %></strong>
                         <label class="mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect" for="icon-toggle-<%= id %>">
                             <input <%= checkedAttr %> @click="onBookmark(<%= id %>)" type="checkbox" id="icon-toggle-<%= id %>" class="mdl-icon-toggle__input">
                             <i class="mdl-icon-toggle__label material-icons">turned_in</i>
