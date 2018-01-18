@@ -73,6 +73,8 @@ router.get('/delete/:message_id', (req, res, next) => {
     });
 });
 
+//TODO Bookshelf(データベース関係) リファクタリング
+
 router.get('/bookmarks', (req, res, next) => {
     if (req.session.login == null){
         res.redirect('/users');
@@ -86,10 +88,8 @@ router.get('/bookmarks', (req, res, next) => {
     new Message().orderBy('created_at', 'DESC')
         .fetchAll({withRelated: ['user']})
         .then((messages) => {
-            //TODO new Like() -> Like 置換
-            new Like().where('user_id', req.session.login.id)
+            Like.where('user_id', req.session.login.id)
                 .fetchAll().then((likes) => {
-                data.userLikes = likes.toArray();
                 // 各投稿がログインユーザにLikeされているかどうか調べる
                 let messagesArray = messages.toArray();
                 let likesArray = likes.toArray()
@@ -101,11 +101,6 @@ router.get('/bookmarks', (req, res, next) => {
                             break;
                         }
                     }
-                }
-                //結果の確認
-                //TODO これを消す
-                for(let j in data.collection) {
-                    console.log(data.collection[j].attributes.liked);
                 }
                 data.activeIndex = 3; //選択されたタブを設定するため
                 res.render('index', data);
@@ -130,9 +125,7 @@ router.get('/hot', (req, res, next) => {
     new Message().orderBy('created_at', 'DESC')
         .fetchAll({withRelated: ['user']})
         .then((messages) => {
-            //TODO new Like() -> Like 置換
-            new Like().fetchAll().then((likes) => {
-                data.userLikes = likes.toArray();
+            Like.fetchAll().then((likes) => {
                 // 各投稿がいずれかのユーザにLikeされているかどうか調べる
                 let messagesArray = messages.toArray();
                 let likesArray = likes.toArray();
@@ -144,7 +137,7 @@ router.get('/hot', (req, res, next) => {
                         }
                     }
                 }
-                new Like().where('user_id', req.session.login.id)
+                Like.where('user_id', req.session.login.id)
                     .fetchAll().then((collection2) => {
                     userLikes = collection2.toArray();
                     // 各投稿がログインユーザにLikeされているかどうか調べる
@@ -157,11 +150,6 @@ router.get('/hot', (req, res, next) => {
                             }
                         }
                         data.collection[j].attributes.liked = liked;
-                    }
-                    //結果の確認
-                    //TODO これを消す
-                    for(let j in data.collection) {
-                        console.log(data.collection[j].attributes.liked);
                     }
                     data.activeIndex = 2; //選択されたタブを設定するため
                     res.render('index', data);
@@ -195,23 +183,17 @@ router.get('/:page', (req, res, next) => {
              data.pagination = collection.pagination;
              new Like().where('user_id', '=', req.session.login.id)
                  .fetchAll().then((collection2) => {
-                 //TODO data.userLikesを消す 気をつける
-                 data.userLikes = collection2.toArray();
+                 let userLikes = collection2.toArray();
                  // 各投稿がログインユーザにLikeされているかどうか調べる
                  for(let j in data.collection) {
                      let liked = false;
-                     for (let i in data.userLikes) {
-                         if (data.userLikes[i].attributes.message_id == data.collection[j].attributes.id) {
+                     for (let i in userLikes) {
+                         if (userLikes[i].attributes.message_id == data.collection[j].attributes.id) {
                              liked = true;
                              break;
                          }
                      }
                      data.collection[j].attributes.liked = liked;
-                 }
-                 //結果の確認
-                 //TODO これを消す
-                 for(let j in data.collection) {
-                     console.log(data.collection[j].attributes.liked);
                  }
                  data.activeIndex = 1; //選択されたタブを設定するため
                  res.render('index', data);
@@ -224,7 +206,6 @@ router.get('/:page', (req, res, next) => {
 });
 
 router.post('/',(req, res, next) => {
-    console.log("POSTがきたきた");
 var rec = {
    message: req.body.msg,
    user_id: req.session.login.id
